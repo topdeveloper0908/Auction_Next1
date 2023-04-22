@@ -1,4 +1,5 @@
 import { FunctionComponent, ReactNode } from 'react'
+import Image from 'next/image'
 
 type HeaderProps = {
   children?: ReactNode
@@ -19,8 +20,12 @@ const Header: FunctionComponent<HeaderProps> = ({
                   <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <span className="mr-2 d-none d-lg-inline text-gray-600 small">David V</span>
-                      <img className="img-profile rounded-circle"
-                          src="img/undraw_profile.svg" />
+                      <Image
+                        src="/img/undraw_profile.svg"
+                        alt='avatar'
+                        width={54}
+                        height={54}
+                        />
                   </a>
                   <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                       aria-labelledby="userDropdown">

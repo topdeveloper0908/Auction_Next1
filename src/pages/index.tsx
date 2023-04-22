@@ -1,9 +1,63 @@
-import Script from 'next/script';
+import { useDebouncedValue } from '@mantine/hooks'
+import { useState, useEffect } from 'react'
+import { Box, Grid, TextInput } from '@mantine/core';
+import { DataTable } from 'mantine-datatable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDollarSign, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faDollarSign, faSearch } from '@fortawesome/free-solid-svg-icons'
 import Layout from '../components/Layout/Layout'
 
 export default function Home() {
+  const PAGE_SIZE = 15;
+  var activeAuctions = [
+    { id: 1, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 2, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 3, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 4, auction: 'Tiger Nixon', price: '$100', time: '23/4/2020' },
+    { id: 5, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 6, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 7, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 8, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 9, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 10, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 11, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 12, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 13, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 14, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 15, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+    { id: 16, auction: 'Tiger Nixon', price: '$200', time: '23/4/2020' },
+  ];
+
+  const initialRecords = activeAuctions.slice(0, 15);
+
+  // Filter and Search
+  const [query, setQuery] = useState('');
+  const [debouncedQuery] = useDebouncedValue(query, 200);
+  const [page, setPage] = useState(1);
+
+  // Pagination
+  const [records, setRecords] = useState(initialRecords);
+
+  useEffect(() => {
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE;
+    setRecords(activeAuctions.slice(from, to));
+  }, [page]);
+  useEffect(() => {
+    setRecords(
+      initialRecords.filter(({ auction, price }) => {
+        if (
+          debouncedQuery !== '' &&
+          !`${auction} ${price}`
+            .toLowerCase()
+            .includes(debouncedQuery.trim().toLowerCase())
+        ) {
+          return false;
+        }
+        return true;
+      })
+    );
+  }, [debouncedQuery]);
+
   return (
     <Layout>
       <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -69,39 +123,37 @@ export default function Home() {
           </div>
           <div className="card-body">
             <div className="table-responsive">
-              <table className="table table-bordered" id="activeTable" width="100%" cellSpacing="0">
-                <thead>
-                    <tr>
-                        <th>Active Auctions</th>
-                        <th>Current Price</th>
-                        <th>Time Out</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>Active Auctions</th>
-                        <th>Current Price</th>
-                        <th>Time Out</th>
-                    </tr>
-                </tfoot>
-                <tbody>
-                    <tr>
-                        <td><a href="#">Tiger Nixon</a></td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">Garrett Winters</a></td>
-                        <td>Accountant</td>
-                        <td>Tokyo</td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">Ashton Cox</a></td>
-                        <td>Junior Technical Author</td>
-                        <td>San Francisco</td>
-                    </tr>
-                </tbody>
-              </table>
+              <Grid mx="0" align="center">
+                <Grid.Col xs={2} sm={3}>
+                  <TextInput
+                    placeholder="Search..."
+                    icon={<FontAwesomeIcon icon={faSearch} size={'xs'} />}
+                    value={query}
+                    onChange={(e) => setQuery(e.currentTarget.value)}
+                  />
+                </Grid.Col>
+              </Grid>
+              <div className='mb-2'></div>
+              <Box sx={{ height: 400 }}>
+                <DataTable
+                  withBorder
+                  borderRadius="sm"
+                  withColumnBorders
+                  striped
+                  highlightOnHover
+                  columns={[
+                    { accessor: 'id', title: '#', width: '20%'},
+                    { accessor: 'auction', title: 'Active Auctions', width: '20%'},
+                    { accessor: 'price', title: 'Current Price', width: '20%'},
+                    { accessor: 'time', title: 'Time Out', width: '20%'},
+                  ]}
+                  records={records}
+                  totalRecords={activeAuctions.length}
+                  recordsPerPage={PAGE_SIZE}
+                  page={page}
+                  onPageChange={(p) => setPage(p)}
+                />
+              </Box>
             </div>
           </div>
         </div>
@@ -111,39 +163,37 @@ export default function Home() {
           </div>
           <div className="card-body">
               <div className="table-responsive">
-                  <table className="table table-bordered" id="completeTable" width="100%" cellSpacing="0">
-                      <thead>
-                          <tr>
-                              <th>Finished Auctions</th>
-                              <th>Sold For</th>
-                              <th>Ended At</th>
-                              <th style={{width: '4rem'}}>Action</th>
-                          </tr>
-                      </thead>
-                      <tfoot>
-                          <tr>
-                              <th>Finished Auctions</th>
-                              <th>Sold For</th>
-                              <th>Ended At</th>
-                              <th>Action</th>
-                          </tr>
-                      </tfoot>
-                      <tbody>
-                          <tr>
-                              <td><a href="#">fast.co.uk</a></td>
-                              <td>£500</td>
-                              <td>4/20/2023</td>
-                              <td>
-                                  <button className="btn btn-success btn-icon-split">
-                                      <span className="icon text-white-50">
-                                          <FontAwesomeIcon icon={faCheck} size='lg'/>
-                                      </span>
-                                      <span className="text">Details</span>
-                                  </button>
-                              </td>
-                          </tr>
-                      </tbody>
-                  </table>
+                <Grid mx="0" align="center">
+                  <Grid.Col xs={2} sm={3}>
+                    <TextInput
+                      placeholder="Search..."
+                      icon={<FontAwesomeIcon icon={faSearch} size={'xs'} />}
+                      value={query}
+                      onChange={(e) => setQuery(e.currentTarget.value)}
+                    />
+                  </Grid.Col>
+                </Grid>
+                <div className='mb-2'></div>
+                <Box sx={{ height: 400 }}>
+                  <DataTable
+                    withBorder
+                    borderRadius="sm"
+                    withColumnBorders
+                    striped
+                    highlightOnHover
+                    columns={[
+                      { accessor: 'id', title: '#', width: '20%'},
+                      { accessor: 'auction', title: 'Active Auctions', width: '20%'},
+                      { accessor: 'price', title: 'Current Price', width: '20%'},
+                      { accessor: 'time', title: 'Time Out', width: '20%'},
+                    ]}
+                    records={records}
+                    totalRecords={activeAuctions.length}
+                    recordsPerPage={PAGE_SIZE}
+                    page={page}
+                    onPageChange={(p) => setPage(p)}
+                  />
+                </Box>
               </div>
           </div>
         </div>
@@ -153,32 +203,41 @@ export default function Home() {
           </div>
           <div className="card-body">
               <div className="table-responsive">
-                  <table className="table table-bordered" id="completeTable" width="100%" cellSpacing="0">
-                      <thead>
-                          <tr>
-                              <th>Domain</th>
-                              <th>Auction Date</th>
-                          </tr>
-                      </thead>
-                      <tfoot>
-                          <tr>
-                              <th>Domain</th>
-                              <th>Auction Date</th>
-                          </tr>
-                      </tfoot>
-                      <tbody>
-                          <tr>
-                              <td><a href="#">fast.co.uk</a></td>
-                              <td>1/5/2023</td>
-                          </tr>
-                      </tbody>
-                  </table>
+                <Grid mx="0" align="center">
+                  <Grid.Col xs={2} sm={3}>
+                    <TextInput
+                      placeholder="Search..."
+                      icon={<FontAwesomeIcon icon={faSearch} size={'xs'} />}
+                      value={query}
+                      onChange={(e) => setQuery(e.currentTarget.value)}
+                    />
+                  </Grid.Col>
+                </Grid>
+                <div className='mb-2'></div>
+                <Box sx={{ height: 400 }}>
+                  <DataTable
+                    withBorder
+                    borderRadius="sm"
+                    withColumnBorders
+                    striped
+                    highlightOnHover
+                    columns={[
+                      { accessor: 'id', title: '#', width: '20%'},
+                      { accessor: 'auction', title: 'Active Auctions', width: '20%'},
+                      { accessor: 'price', title: 'Current Price', width: '20%'},
+                      { accessor: 'time', title: 'Time Out', width: '20%'},
+                    ]}
+                    records={records}
+                    totalRecords={activeAuctions.length}
+                    recordsPerPage={PAGE_SIZE}
+                    page={page}
+                    onPageChange={(p) => setPage(p)}
+                  />
+                </Box>
               </div>
           </div>
+        </div>
       </div>
-      </div>
-      <Script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></Script>
-      <Script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></Script>
     </Layout>
   )
 }

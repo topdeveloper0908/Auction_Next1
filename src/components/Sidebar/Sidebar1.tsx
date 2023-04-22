@@ -1,4 +1,5 @@
-import { ReactNode, FunctionComponent, useState } from 'react'
+import { ReactNode, FunctionComponent, useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faCog, faBlog, faDesktop, faMagic, faStarOfDavid, faEnvelope, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import Link from "next/link";
@@ -9,7 +10,19 @@ type SidebarProps = {
 const Sidebar: FunctionComponent<SidebarProps> = ({
   children,
 }) => {
+    const router = useRouter();
     const [collapseOpen, setCollapseOpen] = useState(true);
+    useEffect(()=>{
+        if(
+            router.pathname === '/new-auction' || 
+            router.pathname === '/auctions' ||
+            router.pathname === '/rating' ||
+            router.pathname === '/purchase' ||
+            router.pathname === '/watch' ||
+            router.pathname === '/profile' ) {
+                setCollapseOpen(true);
+            }
+    }, [])
     return (
         <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <Link
@@ -20,7 +33,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                 </a>
             </Link>
     
-            <li className="nav-item active">
+            <li className={`nav-item ${collapseOpen ? 'active':''}`}>
                 <a href='#' className={`nav-link ${collapseOpen?'':'collapsed'}`} onClick={(e) => {
                     e.preventDefault();
                     setCollapseOpen(!collapseOpen);
@@ -30,19 +43,19 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                 </a>
                 <div id="collapseTwo" className={`collapse ${collapseOpen?'show':''}`}>
                     <div className="bg-white py-2 collapse-inner rounded">
-                        <Link href="/new-auction"><a className="collapse-item">New Auction</a></Link>
-                        <Link href="/auctions"><a className="collapse-item">My Auctions</a></Link>
-                        <Link href="/rating"><a className="collapse-item">My Ratings</a></Link>
-                        <Link href="/purchase"><a className="collapse-item">My Purchases</a></Link>
-                        <Link href="/watch"><a className="collapse-item">My Watchlist</a></Link>
-                        <Link href="/profile"><a className="collapse-item">My Profile</a></Link>
+                        <Link href="/new-auction"><a className={`collapse-item ${router.pathname === '/new-auction' ? 'active':''}`}>New Auction</a></Link>
+                        <Link href="/auctions"><a className={`collapse-item ${router.pathname === '/auctions' ? 'active':''}`}>My Auctions</a></Link>
+                        <Link href="/rating"><a className={`collapse-item ${router.pathname === '/rating' ? 'active':''}`}>My Ratings</a></Link>
+                        <Link href="/purchase"><a className={`collapse-item ${router.pathname === '/purchase' ? 'active':''}`}>My Purchases</a></Link>
+                        <Link href="/watch"><a className={`collapse-item ${router.pathname === '/watch' ? 'active':''}`}>My Watchlist</a></Link>
+                        <Link href="/profile"><a className={`collapse-item ${router.pathname === '/profile' ? 'active':''}`}>My Profile</a></Link>
                     </div>
                 </div>
             </li>
     
             <hr className="sidebar-divider my-0" />
     
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/' ? 'active':''}`}>
                 <Link
                     href="/"
                 >
@@ -53,7 +66,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                 </Link>
             </li>
     
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/blog' ? 'active':''}`}>
                 <Link
                     href="/blog"
                     className="nav-link"
@@ -65,7 +78,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                 </Link>
             </li>
     
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/forum' ? 'active':''}`}>
                 <Link
                     href="/forum"
                     className="nav-link"
@@ -79,7 +92,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
     
             <hr className="sidebar-divider" />
     
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/howitworks' ? 'active':''}`}>
                 <Link
                     href="/howitworks"
                     className="nav-link"
@@ -91,9 +104,9 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                 </Link>
             </li>
     
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/rules' ? 'active':''}`}>
                 <Link
-                    href="/"
+                    href="/rules"
                     className="nav-link"
                 >
                     <a className="nav-link">
@@ -102,7 +115,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                     </a>
                 </Link>
             </li>
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/contact' ? 'active':''}`}>
                 <Link
                     href="/contact"
                     className="nav-link"
@@ -116,9 +129,9 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
     
             <hr className="sidebar-divider d-none d-md-block" />
     
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/logout' ? 'active':''}`}>
                 <Link
-                    href="/signup"
+                    href="/logout"
                     className="nav-link"
                 >
                     <a className="nav-link">

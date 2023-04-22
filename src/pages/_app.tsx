@@ -10,6 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <React.Fragment>
       <Head>
         <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <title>Auction - Dashboard</title>
       </Head>
       <Component {...pageProps} />
     </React.Fragment>

@@ -1,4 +1,5 @@
 import { ReactNode, FunctionComponent } from 'react'
+import { useRouter } from 'next/router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faBlog, faDesktop, faMagic, faStarOfDavid, faEnvelope, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import Link from "next/link";
@@ -9,6 +10,7 @@ type SidebarProps = {
 const Sidebar: FunctionComponent<SidebarProps> = ({
   children,
 }) => {
+    const router = useRouter();
     return (
         <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <Link
@@ -21,7 +23,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
 
             <hr className="sidebar-divider my-0" />
 
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/' ? 'active':''}`}>
                 <Link
                     href="/"                    
                 >
@@ -32,7 +34,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                 </Link>
             </li>
 
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/blog' ? 'active':''}`}>
                 <Link
                     href="/blog"                    
                 >
@@ -43,7 +45,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                 </Link>
             </li>
 
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/forum' ? 'active':''}`}>
                 <Link
                     href="/forum"                    
                 >
@@ -56,7 +58,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
 
             <hr className="sidebar-divider" />
 
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/howitworks' ? 'active':''}`}>
                 <Link
                     href="/howitworks"                    
                 >
@@ -67,9 +69,9 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                 </Link>
             </li>
 
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/rules' ? 'active':''}`}>
                 <Link
-                    href="/"                    
+                    href="/rules"                    
                 >
                     <a className="nav-link">
                         <FontAwesomeIcon icon={faStarOfDavid} />
@@ -78,7 +80,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                 </Link>
             </li>
 
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/contact' ? 'active':''}`}>
                 <Link
                     href="/contact"                    
                 >
@@ -91,7 +93,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
 
             <hr className="sidebar-divider d-none d-md-block" />
 
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/signin' ? 'active':''}`}>
                 <Link
                     href="/signin"                    
                 >
@@ -102,7 +104,7 @@ const Sidebar: FunctionComponent<SidebarProps> = ({
                 </Link>
             </li>
 
-            <li className="nav-item">
+            <li className={`nav-item ${router.pathname === '/signup' ? 'active':''}`}>
                 <Link
                     href="/signup"                    
                 >
